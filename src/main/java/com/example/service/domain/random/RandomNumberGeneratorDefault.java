@@ -1,4 +1,4 @@
-package com.example.service.domain;
+package com.example.service.domain.random;
 
 import com.example.service.model.ValueRandom;
 
