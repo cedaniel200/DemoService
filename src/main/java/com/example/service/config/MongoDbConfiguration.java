@@ -13,10 +13,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import static com.example.service.persistence.MongoDB.DATABASE_NAME;
-import static com.example.service.persistence.MongoDB.MONGO_CONNECTION_FORMAT;
 
 @Configuration
 public class MongoDbConfiguration {
+
+    private static final String MONGO_CONNECTION_FORMAT = "mongodb://%s:%s@%s:27017/%s?authSource=admin";
 
     @Bean
     public CodecRegistry providesCodecRegistryInstance() {
@@ -26,7 +27,7 @@ public class MongoDbConfiguration {
 
     @Bean
     public MongoClient providesMongoClientInstance(CodecRegistry codecRegistry) {
-        String connection = String.format(MONGO_CONNECTION_FORMAT, "stup", "123456789", "localhost", DATABASE_NAME);
+        String connection = String.format(MONGO_CONNECTION_FORMAT, "root", "123456789", "mongo-db", DATABASE_NAME);
 
         MongoClientSettings newClientSettings = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(connection))
