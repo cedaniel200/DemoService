@@ -1,6 +1,5 @@
 # Imagen de la cual se va a basar
 FROM openjdk:8-jdk
-#FROM gradle:7.1
 
 # RUN nos permite ejecutar comandos dentro de nuestro contenedor
 # Creamos dentro del contenedor la carpeta donde estará nuestro código fuente
