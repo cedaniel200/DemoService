@@ -90,7 +90,6 @@ Ejemplo
 ## Requerimientos
 
 * Se debe tener instalado docker.
-
 * Java JDK 1.8 
 * Gradle versión 7.1.
 
@@ -103,8 +102,8 @@ o
     
     docker-compose up
 
-Si no quiere usar docker debe tener corriendo y configurado mongo en su maquina local en el puerto **27017**
-y debe cambiar en la línea 30 la palabra **mongo-db** por **localhost** en la clase **MongoDbConfiguration** del paquete **config**
+Si no quiere usar docker debe tener corriendo y configurado **mongodb** en su maquina local en el puerto **27017**
+y debe cambiar la palabra **mongo-db** por **localhost** en la clase **MongoDbConfiguration** del paquete **infrastructure.config**
 
 ### Si tiene alguna pregunta, puede escribirme a cdanielmg200@gmail.com
 
