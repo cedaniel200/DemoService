@@ -1,39 +1,55 @@
-# StubService
-Servicio que devuelve valores predefinidos
+# DemoService
 
-## API 
-**URL Base**: http://localhost:9000
+Servicio HTTP mínimo que devuelve un número aleatorio. Forma parte del par de demos junto a
+[DemoMicroservices](https://github.com/cedaniel200/DemoMicroservices), donde el microservicio
+`fibonacci` lo consume para construir su secuencia.
 
-### Paths
-* **/random**
+## Requisitos
 
-Devuelve un numero aleatoreo entre 0 y el numero pasado en el parametro **bound**
+- Java 21
+- Gradle wrapper incluido (9.6.1)
 
-**Request**
+## Ejecutar
 
-    /random?bound=#
+```bash
+./gradlew bootRun
+```
 
-Ejemplo
+El servicio queda en `http://localhost:9000`.
 
-    http://localhost:9000/random?bound=10
+## API
 
-**Response**
-    
-    {
-        "value": #
-    }
+### `GET /random?bound=10`
 
-Ejemplo
+Devuelve un entero entre 0 y `bound`, ambos inclusive.
 
-    {
-        "value": 7
-    }
+```bash
+curl "http://localhost:9000/random?bound=10"
+```
 
-## Requerimientos
-Para correr el proyecto se necesita Java JDK 1.8 y Gradle preferiblemente con la versión 7.1.
+```json
+{"value": 7}
+```
 
-## Para correr el proyecto
-Ejecutar el comando:
+Si `bound` falta o es negativo, responde `400 Bad Request`.
 
-    gradlew clean bootRun
+## Tests
 
+```bash
+./gradlew test
+```
+
+Incluye pruebas del generador, del controlador con `@WebMvcTest` y de carga del contexto.
+
+## Docker
+
+```bash
+docker build -t demo-service .
+docker run --rm -p 9000:9000 demo-service
+```
+
+## Stack
+
+- Spring Boot 4.0.9
+- Java 21
+- Gradle 9.6.1
