@@ -1,6 +1,7 @@
 package com.cedaniel200.service.infrastructure.config;
 
-import com.cedaniel200.service.domain.animal.AnimalDomain;
+import com.cedaniel200.service.application.animal.AnimalApplicationService;
+import com.cedaniel200.service.application.random.RandomApplicationService;
 import com.cedaniel200.service.domain.animal.AnimalRepository;
 import com.cedaniel200.service.domain.animal.RandomAnimalGenerator;
 import com.cedaniel200.service.domain.animal.RandomAnimalGeneratorDefault;
@@ -23,8 +24,13 @@ public class DomainConfiguration {
     }
 
     @Bean
-    public AnimalDomain animalDomain(AnimalRepository animalRepository,
-                                     RandomAnimalGenerator randomAnimalGenerator) {
-        return new AnimalDomain(animalRepository, randomAnimalGenerator);
+    public RandomApplicationService randomApplicationService(RandomNumberGenerator randomNumberGenerator) {
+        return new RandomApplicationService(randomNumberGenerator);
+    }
+
+    @Bean
+    public AnimalApplicationService animalApplicationService(AnimalRepository animalRepository,
+                                                             RandomAnimalGenerator randomAnimalGenerator) {
+        return new AnimalApplicationService(animalRepository, randomAnimalGenerator);
     }
 }

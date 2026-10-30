@@ -1,7 +1,7 @@
 package com.cedaniel200.service.infrastructure.controllers.random;
 
-import com.cedaniel200.service.domain.model.ValueRandom;
-import com.cedaniel200.service.domain.random.RandomNumberGenerator;
+import com.cedaniel200.service.application.random.RandomApplicationService;
+import com.cedaniel200.service.application.random.RandomNumberResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -20,11 +20,11 @@ class RandomControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private RandomNumberGenerator generator;
+    private RandomApplicationService randomApplicationService;
 
     @Test
     void returnsGeneratedValue() throws Exception {
-        given(generator.getNumberRandom(10)).willReturn(new ValueRandom(7));
+        given(randomApplicationService.getRandomNumber(10)).willReturn(new RandomNumberResponse(7));
 
         mockMvc.perform(get("/random").param("bound", "10"))
                 .andExpect(status().isOk())

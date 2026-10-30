@@ -1,7 +1,7 @@
 package com.cedaniel200.service.infrastructure.controllers.animal;
 
-import com.cedaniel200.service.domain.animal.AnimalDomain;
-import com.cedaniel200.service.domain.model.Animal;
+import com.cedaniel200.service.application.animal.AnimalApplicationService;
+import com.cedaniel200.service.application.animal.AnimalResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -23,11 +23,11 @@ class AnimalControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private AnimalDomain animalDomain;
+    private AnimalApplicationService animalApplicationService;
 
     @Test
     void createsAnimal() throws Exception {
-        given(animalDomain.createAnimal()).willReturn(new Animal("Perro", "Luis"));
+        given(animalApplicationService.createAnimal()).willReturn(new AnimalResponse("Perro", "Luis"));
 
         mockMvc.perform(post("/animal"))
                 .andExpect(status().isCreated())
@@ -37,7 +37,7 @@ class AnimalControllerTest {
 
     @Test
     void listsAnimals() throws Exception {
-        given(animalDomain.getAnimals()).willReturn(List.of(new Animal("Perro", "Luis")));
+        given(animalApplicationService.getAnimals()).willReturn(List.of(new AnimalResponse("Perro", "Luis")));
 
         mockMvc.perform(get("/animals"))
                 .andExpect(status().isOk())
