@@ -3,7 +3,7 @@ package com.cedaniel200.service.application.animal;
 import com.cedaniel200.service.application.dto.AnimalResult;
 import com.cedaniel200.service.domain.animal.AnimalRepository;
 import com.cedaniel200.service.domain.animal.RandomAnimalGenerator;
-import com.cedaniel200.service.domain.vo.Animal;
+import com.cedaniel200.service.domain.entity.Animal;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -16,13 +16,13 @@ class AnimalApplicationServiceTest {
     @Test
     void savesTheGeneratedAnimal() {
         AnimalRepository repository = new InMemoryAnimalRepository();
-        RandomAnimalGenerator generator = () -> new Animal("Perro", "Luis");
+        RandomAnimalGenerator generator = () -> new Animal("animal-1", "Perro", "Luis");
         AnimalApplicationService service = new AnimalApplicationService(repository, generator);
 
         AnimalResult created = service.createAnimal();
 
-        assertEquals(new AnimalResult("Perro", "Luis"), created);
-        assertEquals(List.of(new AnimalResult("Perro", "Luis")), service.getAnimals());
+        assertEquals(new AnimalResult("animal-1", "Perro", "Luis"), created);
+        assertEquals(List.of(new AnimalResult("animal-1", "Perro", "Luis")), service.getAnimals());
     }
 
     private static class InMemoryAnimalRepository implements AnimalRepository {

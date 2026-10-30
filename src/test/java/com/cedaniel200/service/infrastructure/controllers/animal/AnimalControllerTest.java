@@ -1,8 +1,8 @@
 package com.cedaniel200.service.infrastructure.controllers.animal;
 
-import com.cedaniel200.service.application.dto.AnimalResult;
 import com.cedaniel200.service.application.animal.CreateAnimalUseCase;
 import com.cedaniel200.service.application.animal.GetAnimalsUseCase;
+import com.cedaniel200.service.application.dto.AnimalResult;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -32,20 +32,24 @@ class AnimalControllerTest {
 
     @Test
     void createsAnimal() throws Exception {
-        given(createAnimalUseCase.createAnimal()).willReturn(new AnimalResult("Perro", "Luis"));
+        given(createAnimalUseCase.createAnimal())
+                .willReturn(new AnimalResult("animal-1", "Perro", "Luis"));
 
         mockMvc.perform(post("/animal"))
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value("animal-1"))
                 .andExpect(jsonPath("$.type").value("Perro"))
                 .andExpect(jsonPath("$.name").value("Luis"));
     }
 
     @Test
     void listsAnimals() throws Exception {
-        given(getAnimalsUseCase.getAnimals()).willReturn(List.of(new AnimalResult("Perro", "Luis")));
+        given(getAnimalsUseCase.getAnimals())
+                .willReturn(List.of(new AnimalResult("animal-1", "Perro", "Luis")));
 
         mockMvc.perform(get("/animals"))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value("animal-1"))
                 .andExpect(jsonPath("$[0].type").value("Perro"))
                 .andExpect(jsonPath("$[0].name").value("Luis"));
     }

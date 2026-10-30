@@ -1,6 +1,6 @@
 package com.cedaniel200.service.domain.animal;
 
-import com.cedaniel200.service.domain.vo.Animal;
+import com.cedaniel200.service.domain.entity.Animal;
 import com.cedaniel200.service.domain.vo.AnimalCatalog;
 import com.cedaniel200.service.domain.vo.ValueRandom;
 import com.cedaniel200.service.domain.random.RandomNumberGenerator;
@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class RandomAnimalGeneratorDefaultTest {
 
@@ -19,6 +20,8 @@ class RandomAnimalGeneratorDefaultTest {
 
         Animal animal = new RandomAnimalGeneratorDefault(fixed, catalog).getAnimalRandom();
 
-        assertEquals(new Animal("Vaca", "Pepe"), animal);
+        assertEquals("Vaca", animal.type());
+        assertEquals("Pepe", animal.name());
+        assertNotNull(animal.id());
     }
 }

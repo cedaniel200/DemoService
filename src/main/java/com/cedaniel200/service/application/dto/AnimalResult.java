@@ -1,10 +1,10 @@
 package com.cedaniel200.service.application.dto;
 
-import com.cedaniel200.service.domain.vo.Animal;
+import com.cedaniel200.service.domain.entity.Animal;
 
-public record AnimalResult(String type, String name) {
+public record AnimalResult(String id, String type, String name) {
 
     public static AnimalResult from(Animal animal) {
-        return new AnimalResult(animal.type(), animal.name());
+        return new AnimalResult(animal.id(), animal.type(), animal.name());
     }
 }

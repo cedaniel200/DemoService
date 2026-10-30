@@ -1,8 +1,8 @@
 package com.cedaniel200.service.domain.animal;
 
-import com.cedaniel200.service.domain.vo.Animal;
-import com.cedaniel200.service.domain.vo.AnimalCatalog;
+import com.cedaniel200.service.domain.entity.Animal;
 import com.cedaniel200.service.domain.random.RandomNumberGenerator;
+import com.cedaniel200.service.domain.vo.AnimalCatalog;
 
 public class RandomAnimalGeneratorDefault implements RandomAnimalGenerator {
 
@@ -21,6 +21,6 @@ public class RandomAnimalGeneratorDefault implements RandomAnimalGenerator {
                 .getNumberRandom(animalCatalog.types().size() - 1).value();
         int nameIndex = randomNumberGenerator
                 .getNumberRandom(animalCatalog.names().size() - 1).value();
-        return new Animal(animalCatalog.types().get(typeIndex), animalCatalog.names().get(nameIndex));
+        return Animal.create(animalCatalog.types().get(typeIndex), animalCatalog.names().get(nameIndex));
     }
 }

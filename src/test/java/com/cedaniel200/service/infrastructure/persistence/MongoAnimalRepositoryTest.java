@@ -1,6 +1,6 @@
 package com.cedaniel200.service.infrastructure.persistence;
 
-import com.cedaniel200.service.domain.vo.Animal;
+import com.cedaniel200.service.domain.entity.Animal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,8 +24,10 @@ class MongoAnimalRepositoryTest {
 
     @Test
     void savesAndListsAnimals() {
-        repository.save(new Animal("Perro", "Luis"));
+        Animal animal = new Animal("animal-1", "Perro", "Luis");
 
-        assertThat(repository.getAll()).contains(new Animal("Perro", "Luis"));
+        repository.save(animal);
+
+        assertThat(repository.getAll()).contains(animal);
     }
 }

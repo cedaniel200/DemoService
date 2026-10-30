@@ -1,7 +1,7 @@
 package com.cedaniel200.service.infrastructure.persistence;
 
 import com.cedaniel200.service.domain.animal.AnimalRepository;
-import com.cedaniel200.service.domain.vo.Animal;
+import com.cedaniel200.service.domain.entity.Animal;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,13 +18,14 @@ public class MongoAnimalRepository implements AnimalRepository {
     @Override
     public List<Animal> getAll() {
         return repository.findAll().stream()
-                .map(document -> new Animal(document.type(), document.name()))
+                .map(document -> new Animal(document.id(), document.type(), document.name()))
                 .toList();
     }
 
     @Override
     public Animal save(Animal animal) {
-        AnimalDocument saved = repository.save(new AnimalDocument(animal.type(), animal.name()));
-        return new Animal(saved.type(), saved.name());
+        AnimalDocument saved = repository.save(
+                new AnimalDocument(animal.id(), animal.type(), animal.name()));
+        return new Animal(saved.id(), saved.type(), saved.name());
     }
 }
