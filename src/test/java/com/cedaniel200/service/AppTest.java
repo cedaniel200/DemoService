@@ -1,4 +1,4 @@
-package com.example.service;
+package com.cedaniel200.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

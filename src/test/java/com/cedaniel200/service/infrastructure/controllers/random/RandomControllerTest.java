@@ -1,7 +1,7 @@
-package com.example.service.random;
+package com.cedaniel200.service.infrastructure.controllers.random;
 
-import com.example.service.domain.RandomNumberGenerator;
-import com.example.service.model.ValueRandom;
+import com.cedaniel200.service.domain.model.ValueRandom;
+import com.cedaniel200.service.domain.random.RandomNumberGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;

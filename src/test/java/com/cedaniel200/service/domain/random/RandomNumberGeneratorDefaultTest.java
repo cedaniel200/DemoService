@@ -1,4 +1,4 @@
-package com.example.service.domain;
+package com.cedaniel200.service.domain.random;
 
 import org.junit.jupiter.api.RepeatedTest;
 
@@ -12,7 +12,7 @@ class RandomNumberGeneratorDefaultTest {
     void returnsValueBetweenZeroAndBoundInclusive() {
         int bound = 10;
 
-        int value = generator.getNumberRandom(bound).getValue();
+        int value = generator.getNumberRandom(bound).value();
 
         assertTrue(value >= 0 && value <= bound, "value fuera de rango: " + value);
     }
