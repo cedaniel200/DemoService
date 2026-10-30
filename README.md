@@ -31,16 +31,18 @@ DemoService no forma parte de la arquitectura de microservicios. Se levanta apar
 un servicio de terceros: expone una API pequeña y estable que la aplicación `DemoMicroservices` consume
 por HTTP. Además, la parte de animales muestra persistencia real con MongoDB.
 
-La estructura está separada por capas: `domain` contiene el modelo, los puertos y las reglas, con sus
-value objects en `domain/vo`; `application` los casos de uso y sus resultados en `application/dto`; e
-`infrastructure` los controladores, los DTOs HTTP en `infrastructure/controllers/dto` y los adaptadores.
-Los controladores dependen de los casos de uso de `application`, no del dominio.
+La estructura está separada por capas: `domain` contiene el modelo, los puertos y las reglas, con la
+entidad en `domain/entity` y los value objects en `domain/vo`; `application` los casos de uso y sus
+resultados en `application/dto`; e `infrastructure` los controladores, los DTOs HTTP en
+`infrastructure/controllers/dto` y los adaptadores. Los controladores dependen de los casos de uso de
+`application`, no del dominio.
 
 ## Arquitectura
 
 | Capa | Contenido |
 |---|---|
-| `domain/vo` | `Animal`, `ValueRandom`, `AnimalCatalog` |
+| `domain/entity` | `Animal` (identidad UUID) |
+| `domain/vo` | `ValueRandom`, `AnimalCatalog` |
 | `domain/animal`, `domain/random` | Puertos, servicios de dominio y `InvalidArgumentException` en `domain/exception` |
 | `application/animal`, `application/random` | Casos de uso y servicios de aplicación |
 | `application/dto` | `AnimalResult`, `RandomNumberResult` |
@@ -55,6 +57,8 @@ La dirección de dependencias es:
 ```text
 infrastructure ──> application ──> domain
 ```
+
+La identidad de `Animal` se genera en el dominio con `UUID`; el adaptador de Mongo la usa como `_id`.
 
 Los controladores no importan clases del dominio: reciben resultados de la aplicación y los convierten
 en DTOs HTTP de infraestructura.
@@ -125,7 +129,7 @@ curl -X POST "http://localhost:9000/animal"
 ```
 
 ```json
-{"type": "Perro", "name": "Luis"}
+{"id": "0f8c2a7e-4b1d-4c3a-9e2f-1a2b3c4d5e6f", "type": "Perro", "name": "Luis"}
 ```
 
 Responde `201 Created`.
@@ -140,8 +144,8 @@ curl "http://localhost:9000/animals"
 
 ```json
 [
-  {"type": "Perro", "name": "Luis"},
-  {"type": "Gato", "name": "Lola"}
+  {"id": "0f8c2a7e-4b1d-4c3a-9e2f-1a2b3c4d5e6f", "type": "Perro", "name": "Luis"},
+  {"id": "7e3b1d9c-2a4f-4e8b-8c1d-3f5a6b7c8d9e", "type": "Gato", "name": "Lola"}
 ]
 ```
 
@@ -187,8 +191,8 @@ hay autenticación: es una configuración de demo local.
 ./gradlew test
 ```
 
-Son **42 tests**: VOs, catálogo, generador, casos de uso, los tres endpoints con `@WebMvcTest` y la
-integración del repositorio con **Testcontainers** y MongoDB. El test de integración necesita Docker.
+Son **44 tests**: VOs, entidad, catálogo, generador, casos de uso, los tres endpoints con `@WebMvcTest`
+y la integración del repositorio con **Testcontainers** y MongoDB. El test de integración necesita Docker.
 
 ## Docker
 
