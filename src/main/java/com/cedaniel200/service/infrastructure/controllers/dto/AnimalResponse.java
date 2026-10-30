@@ -1,6 +1,6 @@
-package com.cedaniel200.service.infrastructure.controllers.animal;
+package com.cedaniel200.service.infrastructure.controllers.dto;
 
-import com.cedaniel200.service.application.animal.AnimalResult;
+import com.cedaniel200.service.application.dto.AnimalResult;
 
 public record AnimalResponse(String type, String name) {
 

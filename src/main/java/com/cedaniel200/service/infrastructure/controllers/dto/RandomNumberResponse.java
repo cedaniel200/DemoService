@@ -1,6 +1,6 @@
-package com.cedaniel200.service.infrastructure.controllers.random;
+package com.cedaniel200.service.infrastructure.controllers.dto;
 
-import com.cedaniel200.service.application.random.RandomNumberResult;
+import com.cedaniel200.service.application.dto.RandomNumberResult;
 
 public record RandomNumberResponse(int value) {
 

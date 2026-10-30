@@ -31,17 +31,24 @@ DemoService no forma parte de la arquitectura de microservicios. Se levanta apar
 un servicio de terceros: expone una API pequeña y estable que la aplicación `DemoMicroservices` consume
 por HTTP. Además, la parte de animales muestra persistencia real con MongoDB.
 
-La estructura está separada por capas: `domain` contiene el modelo, los puertos y las reglas;
-`application` los casos de uso y sus resultados; e `infrastructure` los controladores, los DTOs HTTP y
-los adaptadores. Los controladores dependen de los casos de uso de `application`, no del dominio.
+La estructura está separada por capas: `domain` contiene el modelo, los puertos y las reglas, con sus
+value objects en `domain/vo`; `application` los casos de uso y sus resultados en `application/dto`; e
+`infrastructure` los controladores, los DTOs HTTP en `infrastructure/controllers/dto` y los adaptadores.
+Los controladores dependen de los casos de uso de `application`, no del dominio.
 
 ## Arquitectura
 
 | Capa | Contenido |
 |---|---|
-| `domain` | Modelo (`Animal`, `ValueRandom`), puertos (`AnimalRepository`, `RandomNumberGenerator`, `RandomAnimalGenerator`), catálogo (`AnimalCatalog`) y `InvalidArgumentException` |
-| `application` | Casos de uso (`CreateAnimalUseCase`, `GetAnimalsUseCase`, `GetRandomNumberUseCase`), servicios y resultados (`AnimalResult`, `RandomNumberResult`) |
-| `infrastructure` | Controladores, DTOs HTTP (`AnimalResponse`, `RandomNumberResponse`), adaptador `MongoAnimalRepository`, `RandomNumberGeneratorDefault` y configuración |
+| `domain/vo` | `Animal`, `ValueRandom`, `AnimalCatalog` |
+| `domain/animal`, `domain/random` | Puertos, servicios de dominio y `InvalidArgumentException` en `domain/exception` |
+| `application/animal`, `application/random` | Casos de uso y servicios de aplicación |
+| `application/dto` | `AnimalResult`, `RandomNumberResult` |
+| `infrastructure/controllers` | Controladores y `ApiExceptionHandler` |
+| `infrastructure/controllers/dto` | `AnimalResponse`, `RandomNumberResponse` |
+| `infrastructure/persistence` | `AnimalDocument`, `MongoAnimalRepository` |
+| `infrastructure/random` | `RandomNumberGeneratorDefault` |
+| `infrastructure/config` | `BeanConfiguration` |
 
 La dirección de dependencias es:
 

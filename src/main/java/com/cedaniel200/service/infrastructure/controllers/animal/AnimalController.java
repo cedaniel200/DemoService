@@ -2,6 +2,7 @@ package com.cedaniel200.service.infrastructure.controllers.animal;
 
 import com.cedaniel200.service.application.animal.CreateAnimalUseCase;
 import com.cedaniel200.service.application.animal.GetAnimalsUseCase;
+import com.cedaniel200.service.infrastructure.controllers.dto.AnimalResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

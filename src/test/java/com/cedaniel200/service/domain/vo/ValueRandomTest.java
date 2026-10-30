@@ -1,4 +1,4 @@
-package com.cedaniel200.service.domain.model;
+package com.cedaniel200.service.domain.vo;
 
 import com.cedaniel200.service.domain.exception.InvalidArgumentException;
 import org.junit.jupiter.api.Test;

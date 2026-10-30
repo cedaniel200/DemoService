@@ -1,5 +1,6 @@
 package com.cedaniel200.service.application.random;
 
+import com.cedaniel200.service.application.dto.RandomNumberResult;
 import com.cedaniel200.service.domain.random.RandomNumberGenerator;
 
 public class RandomApplicationService implements GetRandomNumberUseCase {

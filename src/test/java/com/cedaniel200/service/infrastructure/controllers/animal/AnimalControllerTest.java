@@ -1,6 +1,6 @@
 package com.cedaniel200.service.infrastructure.controllers.animal;
 
-import com.cedaniel200.service.application.animal.AnimalResult;
+import com.cedaniel200.service.application.dto.AnimalResult;
 import com.cedaniel200.service.application.animal.CreateAnimalUseCase;
 import com.cedaniel200.service.application.animal.GetAnimalsUseCase;
 import org.junit.jupiter.api.Test;

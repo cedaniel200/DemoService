@@ -1,6 +1,6 @@
 package com.cedaniel200.service.infrastructure.persistence;
 
-import com.cedaniel200.service.domain.model.Animal;
+import com.cedaniel200.service.domain.vo.Animal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

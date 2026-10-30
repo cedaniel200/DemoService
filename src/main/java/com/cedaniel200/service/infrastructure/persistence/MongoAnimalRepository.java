@@ -1,7 +1,7 @@
 package com.cedaniel200.service.infrastructure.persistence;
 
 import com.cedaniel200.service.domain.animal.AnimalRepository;
-import com.cedaniel200.service.domain.model.Animal;
+import com.cedaniel200.service.domain.vo.Animal;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

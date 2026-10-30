@@ -1,6 +1,6 @@
 package com.cedaniel200.service.domain.random;
 
-import com.cedaniel200.service.domain.model.ValueRandom;
+import com.cedaniel200.service.domain.vo.ValueRandom;
 
 public interface RandomNumberGenerator {
 

@@ -1,6 +1,7 @@
 package com.cedaniel200.service.application.random;
 
-import com.cedaniel200.service.domain.model.ValueRandom;
+import com.cedaniel200.service.application.dto.RandomNumberResult;
+import com.cedaniel200.service.domain.vo.ValueRandom;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

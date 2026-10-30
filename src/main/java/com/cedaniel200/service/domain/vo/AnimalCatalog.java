@@ -1,4 +1,4 @@
-package com.cedaniel200.service.domain.animal;
+package com.cedaniel200.service.domain.vo;
 
 import com.cedaniel200.service.domain.exception.InvalidArgumentException;
 

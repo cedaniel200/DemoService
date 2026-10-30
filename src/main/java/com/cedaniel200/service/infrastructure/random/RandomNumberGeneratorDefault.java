@@ -1,7 +1,7 @@
 package com.cedaniel200.service.infrastructure.random;
 
 import com.cedaniel200.service.domain.exception.InvalidArgumentException;
-import com.cedaniel200.service.domain.model.ValueRandom;
+import com.cedaniel200.service.domain.vo.ValueRandom;
 import com.cedaniel200.service.domain.random.RandomNumberGenerator;
 
 import java.util.concurrent.ThreadLocalRandom;

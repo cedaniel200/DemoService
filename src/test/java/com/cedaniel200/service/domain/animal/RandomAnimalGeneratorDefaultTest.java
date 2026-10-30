@@ -1,7 +1,8 @@
 package com.cedaniel200.service.domain.animal;
 
-import com.cedaniel200.service.domain.model.Animal;
-import com.cedaniel200.service.domain.model.ValueRandom;
+import com.cedaniel200.service.domain.vo.Animal;
+import com.cedaniel200.service.domain.vo.AnimalCatalog;
+import com.cedaniel200.service.domain.vo.ValueRandom;
 import com.cedaniel200.service.domain.random.RandomNumberGenerator;
 import org.junit.jupiter.api.Test;
 

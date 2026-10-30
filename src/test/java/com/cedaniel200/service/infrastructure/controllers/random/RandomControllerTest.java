@@ -2,7 +2,7 @@ package com.cedaniel200.service.infrastructure.controllers.random;
 
 import com.cedaniel200.service.application.random.GetRandomNumberUseCase;
 import com.cedaniel200.service.application.random.InvalidBoundException;
-import com.cedaniel200.service.application.random.RandomNumberResult;
+import com.cedaniel200.service.application.dto.RandomNumberResult;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;

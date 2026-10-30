@@ -1,8 +1,9 @@
 package com.cedaniel200.service.application.animal;
 
+import com.cedaniel200.service.application.dto.AnimalResult;
 import com.cedaniel200.service.domain.animal.AnimalRepository;
 import com.cedaniel200.service.domain.animal.RandomAnimalGenerator;
-import com.cedaniel200.service.domain.model.Animal;
+import com.cedaniel200.service.domain.vo.Animal;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
