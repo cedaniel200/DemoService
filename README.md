@@ -3,12 +3,13 @@
 ![Java](https://img.shields.io/badge/Java-21-blue?style=flat-square)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.9-6DB33F?style=flat-square&logo=springboot&logoColor=white)
 ![Gradle](https://img.shields.io/badge/Gradle-9.6.1-02303A?style=flat-square&logo=gradle&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-7.0-47A248?style=flat-square&logo=mongodb&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=flat-square&logo=docker&logoColor=white)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 
-Servicio HTTP mínimo que devuelve un número aleatorio. En el par de demos **simula una API externa**
-que consume la aplicación de microservicios: el microservicio `fibonacci` lo llama para obtener el
-número con el que construye su secuencia.
+Servicio HTTP de ejemplo con dos capacidades: genera **números aleatorios** y crea **animales
+aleatorios** que persisten en **MongoDB**. En el par de demos simula una API externa que consume la
+aplicación de microservicios: el microservicio `fibonacci` usa `/random` para construir su secuencia.
 
 ## Table of Contents
 
@@ -16,6 +17,7 @@ número con el que construye su secuencia.
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
 - [API](#api)
+- [MongoDB](#mongodb)
 - [Testing](#testing)
 - [Docker](#docker)
 - [Relación con DemoMicroservices](#relación-con-demomicroservices)
@@ -24,8 +26,11 @@ número con el que construye su secuencia.
 ## Qué es
 
 DemoService no forma parte de la arquitectura de microservicios. Se levanta aparte y se comporta como
-un servicio de terceros: expone un endpoint pequeño y estable que la aplicación `DemoMicroservices`
-consume por HTTP. Así el ejemplo muestra cómo un microservicio depende de una API que no controla.
+un servicio de terceros: expone una API pequeña y estable que la aplicación `DemoMicroservices` consume
+por HTTP. Además, la parte de animales muestra persistencia real con MongoDB.
+
+La estructura sigue el mismo estilo hexagonal del dominio: `domain` contiene el modelo, los puertos y
+los casos de uso; `infrastructure` contiene los controladores y el adaptador de MongoDB.
 
 ## Tech Stack
 
@@ -35,7 +40,9 @@ consume por HTTP. Así el ejemplo muestra cómo un microservicio depende de una 
 | Spring Boot | 4.0.9 |
 | Gradle | 9.6.1 (wrapper incluido) |
 | Spring Web | gestionada por Spring Boot |
-| JUnit 5 | gestionada por Spring Boot |
+| Spring Data MongoDB | gestionada por Spring Boot |
+| MongoDB | 7.0 (contenedor) |
+| JUnit 5 + Testcontainers | gestionadas por Spring Boot |
 | Docker | imagen multi-stage |
 
 ## Getting Started
@@ -43,7 +50,7 @@ consume por HTTP. Así el ejemplo muestra cómo un microservicio depende de una 
 ### Requisitos
 
 - Java 21
-- Docker (opcional, para la imagen)
+- Docker y Docker Compose (para MongoDB y la imagen)
 
 ### Compilar y ejecutar
 
@@ -52,13 +59,14 @@ consume por HTTP. Así el ejemplo muestra cómo un microservicio depende de una 
 ./gradlew bootRun
 ```
 
-El servicio queda en `http://localhost:9000`.
+El servicio queda en `http://localhost:9000`. `/random` funciona sin MongoDB; `/animal` y `/animals`
+necesitan una instancia accesible en `mongodb://localhost:27017/demo` o la URI que indiques en
+`MONGODB_URI`.
 
-También puedes empaquetarlo y ejecutar el jar:
+La forma más sencilla de tener todo levantado es Docker Compose:
 
 ```bash
-./gradlew bootJar
-java -jar build/libs/service-1.0-SNAPSHOT.jar
+docker compose up --build
 ```
 
 ## API
@@ -81,28 +89,76 @@ curl "http://localhost:9000/random?bound=10"
 | `bound` negativo | `400 Bad Request` |
 | `bound` ausente | `400 Bad Request` |
 
+### `POST /animal`
+
+Crea un animal aleatorio y lo guarda en MongoDB.
+
+```bash
+curl -X POST "http://localhost:9000/animal"
+```
+
+```json
+{"type": "Perro", "name": "Luis"}
+```
+
+Responde `201 Created`.
+
+### `GET /animals`
+
+Devuelve los animales guardados.
+
+```bash
+curl "http://localhost:9000/animals"
+```
+
+```json
+[
+  {"type": "Perro", "name": "Luis"},
+  {"type": "Gato", "name": "Lola"}
+]
+```
+
+## MongoDB
+
+La conexión se configura con `spring.mongodb.uri`. Spring Boot toma el valor de la variable estándar
+`SPRING_MONGODB_URI`:
+
+```properties
+spring.mongodb.uri=mongodb://localhost:27017/demo
+```
+
+Con Docker Compose, el servicio apunta a `mongodb://mongo:27017/demo` dentro de la red de Compose. No
+hay autenticación: es una configuración de demo local.
+
 ## Testing
 
 ```bash
 ./gradlew test
 ```
 
-La suite cubre el generador, el controlador con `@WebMvcTest` y la carga del contexto. Son 24 tests
-en total.
+Son **29 tests**: generador, dominio, los tres endpoints con `@WebMvcTest` y un test de integración
+del repositorio con **Testcontainers** y MongoDB. El test de integración necesita Docker.
 
 ## Docker
 
 ```bash
-docker build -t demo-service .
-docker run --rm -p 9000:9000 demo-service
+docker compose up --build
 ```
 
-La imagen se construye en dos etapas y el proceso corre con el usuario `appuser` (UID 1001), no como
-`root`.
+Levanta `mongo` y `demo-service`, espera a que Mongo esté sano y publica el servicio en el puerto
+9000. La imagen se construye en dos etapas y el proceso corre con el usuario `appuser` (UID 1001), no
+como `root`.
+
+Para construir y ejecutar solo el servicio:
+
+```bash
+docker build -t demo-service .
+docker run --rm -p 9000:9000 -e SPRING_MONGODB_URI=mongodb://host.docker.internal:27017/demo demo-service
+```
 
 ## Relación con DemoMicroservices
 
-`DemoService` simula un servicio externo a la aplicación de microservicios. El flujo es:
+`DemoService` simula un servicio externo a la aplicación de microservicios:
 
 ```text
 DemoMicroservices
@@ -110,7 +166,8 @@ DemoMicroservices
 ```
 
 El microservicio `fibonacci` obtiene un número de DemoService y lo usa como punto de partida de su
-secuencia. Los demás servicios del ejemplo no dependen de DemoService.
+secuencia. Los endpoints de animales son una capacidad independiente del par y necesitan MongoDB; el
+flujo de microservicios solo usa `/random`.
 
 ## License
 

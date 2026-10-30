@@ -1,0 +1,21 @@
+services:
+  mongo:
+    image: mongo:7.0
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+  demo-service:
+    build: .
+    ports:
+      - "9000:9000"
+    environment:
+      SPRING_MONGODB_URI: mongodb://mongo:27017/demo
+    depends_on:
+      mongo:
+        condition: service_healthy
