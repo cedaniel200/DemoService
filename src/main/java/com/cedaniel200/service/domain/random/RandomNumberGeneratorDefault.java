@@ -1,6 +1,6 @@
-package com.example.service.domain;
+package com.cedaniel200.service.domain.random;
 
-import com.example.service.model.ValueRandom;
+import com.cedaniel200.service.domain.model.ValueRandom;
 
 import java.util.concurrent.ThreadLocalRandom;
 
