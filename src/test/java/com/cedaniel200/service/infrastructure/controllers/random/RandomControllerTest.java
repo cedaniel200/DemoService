@@ -34,12 +34,18 @@ class RandomControllerTest {
     @Test
     void rejectsMissingBound() throws Exception {
         mockMvc.perform(get("/random"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400));
     }
 
     @Test
     void rejectsNegativeBound() throws Exception {
+        given(randomApplicationService.getRandomNumber(-1))
+                .willThrow(new IllegalArgumentException("bound debe ser mayor o igual que 0"));
+
         mockMvc.perform(get("/random").param("bound", "-1"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.detail").value("bound debe ser mayor o igual que 0"));
     }
 }

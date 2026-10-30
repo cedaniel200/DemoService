@@ -11,6 +11,9 @@ public class RandomApplicationService {
     }
 
     public RandomNumberResponse getRandomNumber(int bound) {
+        if (bound < 0) {
+            throw new IllegalArgumentException("bound debe ser mayor o igual que 0");
+        }
         return RandomNumberResponse.from(randomNumberGenerator.getNumberRandom(bound));
     }
 }

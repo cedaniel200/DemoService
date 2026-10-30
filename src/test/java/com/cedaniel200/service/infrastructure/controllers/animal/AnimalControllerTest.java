@@ -5,6 +5,7 @@ import com.cedaniel200.service.application.animal.AnimalResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -43,5 +44,16 @@ class AnimalControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].type").value("Perro"))
                 .andExpect(jsonPath("$[0].name").value("Luis"));
+    }
+
+    @Test
+    void returnsServiceUnavailableWhenDatabaseFails() throws Exception {
+        given(animalApplicationService.createAnimal())
+                .willThrow(new DataAccessResourceFailureException("mongo no disponible"));
+
+        mockMvc.perform(post("/animal"))
+                .andExpect(status().isServiceUnavailable())
+                .andExpect(jsonPath("$.status").value(503))
+                .andExpect(jsonPath("$.detail").value("No se pudo acceder a la base de datos"));
     }
 }
