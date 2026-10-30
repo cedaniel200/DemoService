@@ -1,7 +1,8 @@
 package com.cedaniel200.service.infrastructure.controllers.random;
 
-import com.cedaniel200.service.application.random.RandomApplicationService;
-import com.cedaniel200.service.application.random.RandomNumberResponse;
+import com.cedaniel200.service.application.random.GetRandomNumberUseCase;
+import com.cedaniel200.service.application.random.InvalidBoundException;
+import com.cedaniel200.service.application.random.RandomNumberResult;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -20,11 +21,11 @@ class RandomControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private RandomApplicationService randomApplicationService;
+    private GetRandomNumberUseCase getRandomNumberUseCase;
 
     @Test
     void returnsGeneratedValue() throws Exception {
-        given(randomApplicationService.getRandomNumber(10)).willReturn(new RandomNumberResponse(7));
+        given(getRandomNumberUseCase.getRandomNumber(10)).willReturn(new RandomNumberResult(7));
 
         mockMvc.perform(get("/random").param("bound", "10"))
                 .andExpect(status().isOk())
@@ -40,8 +41,8 @@ class RandomControllerTest {
 
     @Test
     void rejectsNegativeBound() throws Exception {
-        given(randomApplicationService.getRandomNumber(-1))
-                .willThrow(new IllegalArgumentException("bound debe ser mayor o igual que 0"));
+        given(getRandomNumberUseCase.getRandomNumber(-1))
+                .willThrow(new InvalidBoundException("bound debe ser mayor o igual que 0"));
 
         mockMvc.perform(get("/random").param("bound", "-1"))
                 .andExpect(status().isBadRequest())

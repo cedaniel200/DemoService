@@ -6,7 +6,7 @@ import com.cedaniel200.service.domain.model.Animal;
 
 import java.util.List;
 
-public class AnimalApplicationService {
+public class AnimalApplicationService implements CreateAnimalUseCase, GetAnimalsUseCase {
 
     private final AnimalRepository repository;
     private final RandomAnimalGenerator randomAnimalGenerator;
@@ -16,15 +16,16 @@ public class AnimalApplicationService {
         this.randomAnimalGenerator = randomAnimalGenerator;
     }
 
-    public AnimalResponse createAnimal() {
-        Animal animal = repository.save(randomAnimalGenerator.getAnimalRandom())
-                .orElseThrow(() -> new IllegalStateException("No se pudo guardar el animal"));
-        return AnimalResponse.from(animal);
+    @Override
+    public AnimalResult createAnimal() {
+        Animal animal = repository.save(randomAnimalGenerator.getAnimalRandom());
+        return AnimalResult.from(animal);
     }
 
-    public List<AnimalResponse> getAnimals() {
+    @Override
+    public List<AnimalResult> getAnimals() {
         return repository.getAll().stream()
-                .map(AnimalResponse::from)
+                .map(AnimalResult::from)
                 .toList();
     }
 }

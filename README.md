@@ -31,17 +31,17 @@ DemoService no forma parte de la arquitectura de microservicios. Se levanta apar
 un servicio de terceros: expone una API pequeña y estable que la aplicación `DemoMicroservices` consume
 por HTTP. Además, la parte de animales muestra persistencia real con MongoDB.
 
-La estructura está separada por capas: `domain` contiene el modelo y los puertos, `application` los
-casos de uso y los DTOs de respuesta, e `infrastructure` los controladores y el adaptador de MongoDB.
-Los controladores dependen de `application`, no del dominio.
+La estructura está separada por capas: `domain` contiene el modelo, los puertos y las reglas;
+`application` los casos de uso y sus resultados; e `infrastructure` los controladores, los DTOs HTTP y
+los adaptadores. Los controladores dependen de los casos de uso de `application`, no del dominio.
 
 ## Arquitectura
 
 | Capa | Contenido |
 |---|---|
-| `domain` | Modelo (`Animal`, `ValueRandom`) y puertos (`AnimalRepository`, `RandomNumberGenerator`, `RandomAnimalGenerator`) |
-| `application` | Casos de uso (`AnimalApplicationService`, `RandomApplicationService`) y DTOs de respuesta (`AnimalResponse`, `RandomNumberResponse`) |
-| `infrastructure` | Controladores HTTP y adaptador `MongoAnimalRepository` |
+| `domain` | Modelo (`Animal`, `ValueRandom`), puertos (`AnimalRepository`, `RandomNumberGenerator`, `RandomAnimalGenerator`), catálogo (`AnimalCatalog`) y `InvalidArgumentException` |
+| `application` | Casos de uso (`CreateAnimalUseCase`, `GetAnimalsUseCase`, `GetRandomNumberUseCase`), servicios y resultados (`AnimalResult`, `RandomNumberResult`) |
+| `infrastructure` | Controladores, DTOs HTTP (`AnimalResponse`, `RandomNumberResponse`), adaptador `MongoAnimalRepository`, `RandomNumberGeneratorDefault` y configuración |
 
 La dirección de dependencias es:
 
@@ -49,7 +49,8 @@ La dirección de dependencias es:
 infrastructure ──> application ──> domain
 ```
 
-Los controladores no importan clases del dominio: reciben DTOs de la capa de aplicación.
+Los controladores no importan clases del dominio: reciben resultados de la aplicación y los convierten
+en DTOs HTTP de infraestructura.
 
 ## Tech Stack
 
@@ -146,7 +147,7 @@ El `@RestControllerAdvice` centraliza la traducción de excepciones a códigos H
 |---|---|---|
 | `bound` negativo | `400` | `bound debe ser mayor o igual que 0` |
 | `bound` ausente | `400` | `Falta el parámetro obligatorio: bound` |
-| Fallo al guardar el animal | `500` | Mensaje del error |
+| Valor inválido en un VO (`Animal`, `ValueRandom`, `AnimalCatalog`) | `400` | Mensaje de validación |
 | MongoDB no disponible | `503` | `No se pudo acceder a la base de datos` |
 
 Ejemplo:
@@ -179,8 +180,8 @@ hay autenticación: es una configuración de demo local.
 ./gradlew test
 ```
 
-Son **29 tests**: generador, dominio, los tres endpoints con `@WebMvcTest` y un test de integración
-del repositorio con **Testcontainers** y MongoDB. El test de integración necesita Docker.
+Son **42 tests**: VOs, catálogo, generador, casos de uso, los tres endpoints con `@WebMvcTest` y la
+integración del repositorio con **Testcontainers** y MongoDB. El test de integración necesita Docker.
 
 ## Docker
 

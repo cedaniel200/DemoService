@@ -1,7 +1,7 @@
 package com.cedaniel200.service.infrastructure.controllers.animal;
 
-import com.cedaniel200.service.application.animal.AnimalApplicationService;
-import com.cedaniel200.service.application.animal.AnimalResponse;
+import com.cedaniel200.service.application.animal.CreateAnimalUseCase;
+import com.cedaniel200.service.application.animal.GetAnimalsUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,20 +13,24 @@ import java.util.List;
 @RestController
 public class AnimalController {
 
-    private final AnimalApplicationService animalApplicationService;
+    private final CreateAnimalUseCase createAnimalUseCase;
+    private final GetAnimalsUseCase getAnimalsUseCase;
 
-    public AnimalController(AnimalApplicationService animalApplicationService) {
-        this.animalApplicationService = animalApplicationService;
+    public AnimalController(CreateAnimalUseCase createAnimalUseCase, GetAnimalsUseCase getAnimalsUseCase) {
+        this.createAnimalUseCase = createAnimalUseCase;
+        this.getAnimalsUseCase = getAnimalsUseCase;
     }
 
     @PostMapping("/animal")
     @ResponseStatus(HttpStatus.CREATED)
     public AnimalResponse createAnimal() {
-        return animalApplicationService.createAnimal();
+        return AnimalResponse.from(createAnimalUseCase.createAnimal());
     }
 
     @GetMapping("/animals")
     public List<AnimalResponse> getAnimals() {
-        return animalApplicationService.getAnimals();
+        return getAnimalsUseCase.getAnimals().stream()
+                .map(AnimalResponse::from)
+                .toList();
     }
 }

@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -19,10 +18,10 @@ class AnimalApplicationServiceTest {
         RandomAnimalGenerator generator = () -> new Animal("Perro", "Luis");
         AnimalApplicationService service = new AnimalApplicationService(repository, generator);
 
-        AnimalResponse created = service.createAnimal();
+        AnimalResult created = service.createAnimal();
 
-        assertEquals(new AnimalResponse("Perro", "Luis"), created);
-        assertEquals(List.of(new AnimalResponse("Perro", "Luis")), service.getAnimals());
+        assertEquals(new AnimalResult("Perro", "Luis"), created);
+        assertEquals(List.of(new AnimalResult("Perro", "Luis")), service.getAnimals());
     }
 
     private static class InMemoryAnimalRepository implements AnimalRepository {
@@ -35,9 +34,9 @@ class AnimalApplicationServiceTest {
         }
 
         @Override
-        public Optional<Animal> save(Animal animal) {
+        public Animal save(Animal animal) {
             animals.add(animal);
-            return Optional.of(animal);
+            return animal;
         }
     }
 }

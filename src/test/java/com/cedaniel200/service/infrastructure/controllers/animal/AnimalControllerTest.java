@@ -1,7 +1,8 @@
 package com.cedaniel200.service.infrastructure.controllers.animal;
 
-import com.cedaniel200.service.application.animal.AnimalApplicationService;
-import com.cedaniel200.service.application.animal.AnimalResponse;
+import com.cedaniel200.service.application.animal.AnimalResult;
+import com.cedaniel200.service.application.animal.CreateAnimalUseCase;
+import com.cedaniel200.service.application.animal.GetAnimalsUseCase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -24,11 +25,14 @@ class AnimalControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private AnimalApplicationService animalApplicationService;
+    private CreateAnimalUseCase createAnimalUseCase;
+
+    @MockitoBean
+    private GetAnimalsUseCase getAnimalsUseCase;
 
     @Test
     void createsAnimal() throws Exception {
-        given(animalApplicationService.createAnimal()).willReturn(new AnimalResponse("Perro", "Luis"));
+        given(createAnimalUseCase.createAnimal()).willReturn(new AnimalResult("Perro", "Luis"));
 
         mockMvc.perform(post("/animal"))
                 .andExpect(status().isCreated())
@@ -38,7 +42,7 @@ class AnimalControllerTest {
 
     @Test
     void listsAnimals() throws Exception {
-        given(animalApplicationService.getAnimals()).willReturn(List.of(new AnimalResponse("Perro", "Luis")));
+        given(getAnimalsUseCase.getAnimals()).willReturn(List.of(new AnimalResult("Perro", "Luis")));
 
         mockMvc.perform(get("/animals"))
                 .andExpect(status().isOk())
@@ -48,7 +52,7 @@ class AnimalControllerTest {
 
     @Test
     void returnsServiceUnavailableWhenDatabaseFails() throws Exception {
-        given(animalApplicationService.createAnimal())
+        given(createAnimalUseCase.createAnimal())
                 .willThrow(new DataAccessResourceFailureException("mongo no disponible"));
 
         mockMvc.perform(post("/animal"))

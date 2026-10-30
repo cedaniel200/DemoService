@@ -5,7 +5,6 @@ import com.cedaniel200.service.domain.model.Animal;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class MongoAnimalRepository implements AnimalRepository {
@@ -24,8 +23,8 @@ public class MongoAnimalRepository implements AnimalRepository {
     }
 
     @Override
-    public Optional<Animal> save(Animal animal) {
+    public Animal save(Animal animal) {
         AnimalDocument saved = repository.save(new AnimalDocument(animal.type(), animal.name()));
-        return Optional.of(new Animal(saved.type(), saved.name()));
+        return new Animal(saved.type(), saved.name());
     }
 }
