@@ -18,6 +18,7 @@ aplicación de microservicios: el microservicio `fibonacci` usa `/random` para c
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
 - [API](#api)
+- [Errores](#errores)
 - [MongoDB](#mongodb)
 - [Testing](#testing)
 - [Docker](#docker)
@@ -134,6 +135,30 @@ curl "http://localhost:9000/animals"
   {"type": "Perro", "name": "Luis"},
   {"type": "Gato", "name": "Lola"}
 ]
+```
+
+## Errores
+
+Los errores se devuelven con el formato estándar `application/problem+json` de Spring (`ProblemDetail`).
+El `@RestControllerAdvice` centraliza la traducción de excepciones a códigos HTTP:
+
+| Situación | Estado | `detail` |
+|---|---|---|
+| `bound` negativo | `400` | `bound debe ser mayor o igual que 0` |
+| `bound` ausente | `400` | `Falta el parámetro obligatorio: bound` |
+| Fallo al guardar el animal | `500` | Mensaje del error |
+| MongoDB no disponible | `503` | `No se pudo acceder a la base de datos` |
+
+Ejemplo:
+
+```json
+{
+  "type": "about:blank",
+  "title": "Solicitud inválida",
+  "status": 400,
+  "detail": "bound debe ser mayor o igual que 0",
+  "instance": "/random"
+}
 ```
 
 ## MongoDB
