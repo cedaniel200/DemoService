@@ -14,6 +14,7 @@ aplicación de microservicios: el microservicio `fibonacci` usa `/random` para c
 ## Table of Contents
 
 - [Qué es](#qué-es)
+- [Arquitectura](#arquitectura)
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
 - [API](#api)
@@ -29,8 +30,25 @@ DemoService no forma parte de la arquitectura de microservicios. Se levanta apar
 un servicio de terceros: expone una API pequeña y estable que la aplicación `DemoMicroservices` consume
 por HTTP. Además, la parte de animales muestra persistencia real con MongoDB.
 
-La estructura sigue el mismo estilo hexagonal del dominio: `domain` contiene el modelo, los puertos y
-los casos de uso; `infrastructure` contiene los controladores y el adaptador de MongoDB.
+La estructura está separada por capas: `domain` contiene el modelo y los puertos, `application` los
+casos de uso y los DTOs de respuesta, e `infrastructure` los controladores y el adaptador de MongoDB.
+Los controladores dependen de `application`, no del dominio.
+
+## Arquitectura
+
+| Capa | Contenido |
+|---|---|
+| `domain` | Modelo (`Animal`, `ValueRandom`) y puertos (`AnimalRepository`, `RandomNumberGenerator`, `RandomAnimalGenerator`) |
+| `application` | Casos de uso (`AnimalApplicationService`, `RandomApplicationService`) y DTOs de respuesta (`AnimalResponse`, `RandomNumberResponse`) |
+| `infrastructure` | Controladores HTTP y adaptador `MongoAnimalRepository` |
+
+La dirección de dependencias es:
+
+```text
+infrastructure ──> application ──> domain
+```
+
+Los controladores no importan clases del dominio: reciben DTOs de la capa de aplicación.
 
 ## Tech Stack
 
