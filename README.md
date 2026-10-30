@@ -52,6 +52,30 @@ resultados en `application/dto`; e `infrastructure` los controladores, los DTOs 
 | `infrastructure/random` | `RandomNumberGeneratorDefault` |
 | `infrastructure/config` | `BeanConfiguration` |
 
+### Árbol de paquetes
+
+```text
+com.cedaniel200.service
+├── domain/                     # núcleo: no depende de application ni de infrastructure
+│   ├── entity/                 # Animal: entidad con id UUID
+│   ├── vo/                     # ValueRandom y AnimalCatalog
+│   ├── animal/                 # puertos y servicios de animales
+│   ├── random/                 # puerto del generador aleatorio
+│   └── exception/              # InvalidArgumentException
+├── application/                # casos de uso: solo depende de domain
+│   ├── animal/                 # CreateAnimalUseCase, GetAnimalsUseCase y su servicio
+│   ├── random/                 # GetRandomNumberUseCase, servicio e InvalidBoundException
+│   └── dto/                    # AnimalResult y RandomNumberResult
+└── infrastructure/             # adaptadores: depende de application y domain
+    ├── config/                 # BeanConfiguration (composition root)
+    ├── controllers/            # AnimalController, RandomController y ApiExceptionHandler
+    │   └── dto/                # AnimalResponse y RandomNumberResponse
+    ├── persistence/            # AnimalDocument y MongoAnimalRepository
+    └── random/                 # RandomNumberGeneratorDefault
+```
+
+Las reglas se verifican automáticamente con **ArchUnit** en `ArchitectureTest`.
+
 La dirección de dependencias es:
 
 ```text
@@ -74,6 +98,7 @@ en DTOs HTTP de infraestructura.
 | Spring Data MongoDB | gestionada por Spring Boot |
 | MongoDB | 7.0 (contenedor) |
 | JUnit 5 + Testcontainers | gestionadas por Spring Boot |
+| ArchUnit | 1.5.1 (reglas de arquitectura) |
 | Docker | imagen multi-stage |
 
 ## Getting Started
@@ -191,8 +216,9 @@ hay autenticación: es una configuración de demo local.
 ./gradlew test
 ```
 
-Son **44 tests**: VOs, entidad, catálogo, generador, casos de uso, los tres endpoints con `@WebMvcTest`
-y la integración del repositorio con **Testcontainers** y MongoDB. El test de integración necesita Docker.
+Son **51 tests**: VOs, entidad, catálogo, generador, casos de uso, los tres endpoints con `@WebMvcTest`,
+la integración del repositorio con **Testcontainers** y **7 reglas de arquitectura con ArchUnit**. El
+test de integración necesita Docker.
 
 ## Docker
 
